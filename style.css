@@ -8,7 +8,7 @@ Description: Warmt nordisk / japandi blocktheme (FSE) til GarageRisteriet - spec
 Requires at least: 6.5
 Tested up to: 6.8
 Requires PHP: 7.4
-Version: 1.3.13
+Version: 1.3.14
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: garageristeriet
@@ -229,6 +229,17 @@ h1{font-size:var(--fs-2xl)}
 .woocommerce ul.products li.product .button,.woocommerce ul.products li.product .added_to_cart{margin:auto var(--space-6) var(--space-6)!important;display:inline-flex;align-items:center;justify-content:center;background:transparent;color:var(--text-body);border:1px solid var(--border-strong);border-radius:4px;padding:12px 18px;font-family:var(--font-sans);font-size:var(--fs-sm);font-weight:600;letter-spacing:var(--ls-button);text-transform:uppercase;text-decoration:none}
 .woocommerce ul.products li.product .button:hover{background:var(--surface-sunken);border-color:var(--gr-wood-600);color:var(--text-strong)}
 .woocommerce ul.products li.product .onsale{position:absolute;top:var(--space-5);left:var(--space-5);right:auto;margin:0;background:var(--gr-copper-500);color:var(--gr-paper-050);border-radius:999px;padding:4px 12px;font-family:var(--font-sans);font-size:var(--fs-2xs);font-weight:600;letter-spacing:.08em;text-transform:uppercase;min-height:0;line-height:1.4}
+/* 1.3.14: "Udsolgt" paa kortet, tegnet paa WooCommerces egen klasse (se
+   functions.php for hvorfor ikke som markup). Samme plads og form som .onsale. Den lyse kant
+   er der for de moerke sæsonlabels, hvor en moerk pille ellers forsvinder. */
+.woocommerce ul.products li.product.outofstock::before{content:"Udsolgt";position:absolute;z-index:2;top:var(--space-5);left:var(--space-5);margin:0;background:var(--gr-espresso-950);color:var(--gr-paper-050);border:1px solid var(--gr-paper-300);border-radius:999px;padding:4px 12px;font-family:var(--font-sans);font-size:var(--fs-2xs);font-weight:600;letter-spacing:.08em;text-transform:uppercase;line-height:1.4;pointer-events:none}
+/* Et udsolgt tilbud er ikke et tilbud, og de to maerker deler hjoerne. Skjult i
+   CSS og ikke via woocommerce_sale_flash: et tomt svar derfra efterlader
+   skabelonens linjeskift, som wpautop goer til et tomt <p> over billedet. */
+.woocommerce ul.products li.product.outofstock .onsale{display:none}
+/* wpautop saetter <br> rundt om .onsale inde i kortets link; de skubbede
+   billedet 56px ned paa ethvert kort paa tilbud. */
+.woocommerce ul.products li.product > a > br{display:none}
 @media (max-width:1023px){.woocommerce ul.products,.woocommerce-page ul.products{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:640px){.woocommerce ul.products,.woocommerce-page ul.products{grid-template-columns:1fr}}
 

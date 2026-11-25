@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'GR_VERSION', '1.3.13' );
+define( 'GR_VERSION', '1.3.14' );
 
 /**
  * Temaunderstøttelse.
@@ -126,7 +126,7 @@ function gr_add_to_cart_text( $text, $product = null ) {
 	// link til produktsiden, hvor vaegt og formaling vaelges. Saa maa der ikke
 	// staa "Laeg i kurv" paa den; det lover noget klikket ikke goer.
 	if ( $product instanceof WC_Product
-		&& ( $product->is_type( 'variable' ) || ! $product->is_purchasable() || ! $product->supports( 'ajax_add_to_cart' ) ) ) {
+		&& ( $product->is_type( 'variable' ) || ! $product->is_purchasable() || ! $product->is_in_stock() || ! $product->supports( 'ajax_add_to_cart' ) ) ) {
 		return __( 'Læs mere', 'garageristeriet' );
 	}
 	return __( 'Læg i kurv', 'garageristeriet' );
@@ -134,6 +134,13 @@ function gr_add_to_cart_text( $text, $product = null ) {
 // 10, 2 — ikke bare 10. Uden antallet kommer $product aldrig frem, og saa
 // falder hver eneste knap tilbage paa "Laeg i kurv" uden at noget fejler.
 add_filter( 'woocommerce_product_add_to_cart_text', 'gr_add_to_cart_text', 10, 2 );
+
+/*
+ * "Udsolgt" paa produktkortet tegnes i style.css paa li.outofstock, som
+ * WooCommerce selv saetter. Ikke som en <span> herfra: [products] koerer
+ * gennem wpautop, der pakker et inline-element ind i <p> og skubber billedet
+ * 18px ned paa netop de udsolgte kort.
+ */
 
 /**
  * Ingen Google Fonts udefra (GDPR) - fonte hostes lokalt via theme.json.
